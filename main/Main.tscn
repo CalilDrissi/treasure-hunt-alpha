@@ -1,0 +1,102 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://main/Main.gd" type="Script" id=1]
+[ext_resource path="res://assets/SAND.png" type="Texture" id=2]
+[ext_resource path="res://player/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://coin/Coin.tscn" type="PackedScene" id=4]
+[ext_resource path="res://hud/HUD.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/flatDark25.png" type="Texture" id=6]
+[ext_resource path="res://assets/transparentDark22.png" type="Texture" id=7]
+[ext_resource path="res://assets/transparentDark23 2.png" type="Texture" id=8]
+[ext_resource path="res://assets/flatDark23.png" type="Texture" id=9]
+[ext_resource path="res://assets/transparentDark24 2.png" type="Texture" id=10]
+[ext_resource path="res://assets/transparentDark25 2.png" type="Texture" id=11]
+[ext_resource path="res://assets/flatDark24.png" type="Texture" id=12]
+[ext_resource path="res://assets/flatDark26.png" type="Texture" id=13]
+[ext_resource path="res://Pause.tscn" type="PackedScene" id=14]
+[ext_resource path="res://hud/flatLight12.png" type="Texture" id=15]
+
+[node name="Main" type="Node"]
+script = ExtResource( 1 )
+Coin = ExtResource( 4 )
+playtime = 7
+
+[node name="Background" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 2 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player" parent="." instance=ExtResource( 3 )]
+
+[node name="CoinContainer" type="Node" parent="."]
+
+[node name="PlayerStart" type="Position2D" parent="."]
+position = Vector2( 291.071, 473.852 )
+
+[node name="GameTimer" type="Timer" parent="."]
+
+[node name="HUD" parent="." instance=ExtResource( 5 )]
+
+[node name="Control2" type="Control" parent="."]
+pause_mode = 2
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -67.1509
+margin_top = -104.758
+margin_right = -27.1509
+margin_bottom = -64.7576
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="pause" type="TouchScreenButton" parent="Control2"]
+pause_mode = 2
+position = Vector2( -8, -8 )
+normal = ExtResource( 15 )
+action = "pause"
+
+[node name="Control" type="Control" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -40.0
+margin_right = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="up" type="TouchScreenButton" parent="Control"]
+position = Vector2( 94.5098, -152.266 )
+normal = ExtResource( 10 )
+pressed = ExtResource( 6 )
+action = "ui_up"
+
+[node name="down" type="TouchScreenButton" parent="Control"]
+position = Vector2( 94.5099, -52.5055 )
+normal = ExtResource( 11 )
+pressed = ExtResource( 13 )
+action = "ui_down"
+
+[node name="left" type="TouchScreenButton" parent="Control"]
+position = Vector2( 8.25085, -94.5098 )
+normal = ExtResource( 7 )
+pressed = ExtResource( 9 )
+action = "ui_left"
+
+[node name="right" type="TouchScreenButton" parent="Control"]
+position = Vector2( 182.269, -93.0097 )
+normal = ExtResource( 8 )
+pressed = ExtResource( 12 )
+action = "ui_right"
+
+[node name="Pause" parent="." instance=ExtResource( 14 )]
+visible = false
+[connection signal="hurt" from="Player" to="." method="_on_Player_hurt"]
+[connection signal="pickup" from="Player" to="." method="_on_Player_pickup"]
+[connection signal="timeout" from="GameTimer" to="." method="_on_GameTimer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="new_game"]
