@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://main/Main.gd" type="Script" id=1]
 [ext_resource path="res://assets/SAND.png" type="Texture" id=2]
@@ -15,11 +15,14 @@
 [ext_resource path="res://assets/flatDark26.png" type="Texture" id=13]
 [ext_resource path="res://Pause.tscn" type="PackedScene" id=14]
 [ext_resource path="res://hud/flatLight12.png" type="Texture" id=15]
+[ext_resource path="res://assets/audio/Level.wav" type="AudioStream" id=16]
+[ext_resource path="res://assets/audio/Hit.wav" type="AudioStream" id=17]
+[ext_resource path="res://assets/audio/Coin.wav" type="AudioStream" id=18]
 
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
 Coin = ExtResource( 4 )
-playtime = 7
+playtime = 30
 
 [node name="Background" type="TextureRect" parent="."]
 anchor_right = 1.0
@@ -96,6 +99,15 @@ action = "ui_right"
 
 [node name="Pause" parent="." instance=ExtResource( 14 )]
 visible = false
+
+[node name="CoinSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 18 )
+
+[node name="LevelSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 16 )
+
+[node name="EndSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 17 )
 [connection signal="hurt" from="Player" to="." method="_on_Player_hurt"]
 [connection signal="pickup" from="Player" to="." method="_on_Player_pickup"]
 [connection signal="timeout" from="GameTimer" to="." method="_on_GameTimer_timeout"]

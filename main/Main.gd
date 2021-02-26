@@ -22,8 +22,7 @@ func _ready():
 	$Control.hide()
 	$Control2.hide()
 	load_highscore()
-	Global.highscore = highscore
-	$HUD.show_highscore(highscore)
+	$HUD.show_highscore(Global.highscore)
 	
 func new_game():
 	playing = true
@@ -45,6 +44,7 @@ func spawn_coins():
 		$CoinContainer.add_child(c)
 		c.screensize = screensize
 		c.position = Vector2(rand_range(0,screensize.x), rand_range(0, screensize.y))
+		$LevelSound.play()
 
 func _process(delta):
 	if playing and $CoinContainer.get_child_count() == 0:
@@ -54,14 +54,14 @@ func _process(delta):
 
 
 func _on_GameTimer_timeout():
-	time_left -= 1
+	time_left = time_left - 1
 	$HUD.update_timer(time_left)
-	if time_left <= 0:
+	if time_left == 0:
 		game_over()
 
 
 func game_over():
-	if score > highscore:
+	if score > Global.highscore:
 		highscore = score
 		save_highscore()
 	playing = false
@@ -71,13 +71,14 @@ func game_over():
 	$HUD.show_game_over()
 	$Player.die()
 	$Control.hide()
-	
+	$Control2.hide()
+	$EndSound.play()
 
 
 func _on_Player_pickup():
 	score += 1
 	$HUD.update_score(score)
-
+	$CoinSound.play()
 
 
 func _on_Player_hurt():
@@ -89,11 +90,12 @@ func save_highscore():
 	save_data.open(SAVE_FILE_PATH, File.WRITE)
 	save_data.store_var(highscore)
 	save_data.close()
+	load_highscore()
 	
 func load_highscore():
 	var save_data = File.new()
 	if save_data.file_exists(SAVE_FILE_PATH):
 		save_data.open(SAVE_FILE_PATH, File.READ)
-		highscore = save_data.get_var()
+		Global.highscore = save_data.get_var()
 		save_data.close()
 		
